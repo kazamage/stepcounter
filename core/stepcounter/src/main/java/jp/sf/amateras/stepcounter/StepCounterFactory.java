@@ -324,6 +324,14 @@ public class StepCounterFactory {
 			// Groovy用カウンタを作成
 			return createJavaCounter("Groovy");
 
+		} else if(fileName.endsWith(".coffee")){
+			// CoffeeScript用カウンタを作成
+			DefaultStepCounter counter = new DefaultStepCounter();
+			counter.addLineComment("#");
+			counter.addAreaComment(new AreaComment("###","###"));
+			counter.setFileType("CoffeeScript");
+			return counter;
+
 		} else {
 			return null;
 		}

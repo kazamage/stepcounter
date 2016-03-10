@@ -146,7 +146,8 @@ public class DefaultStepCounter implements StepCounter, Cutter {
 	/** 単一行コメントかどうかをチェック */
 	private boolean lineCommentCheck(String line){
 		for(int i=0;i<lineComments.size();i++){
-			if(line.startsWith((String) lineComments.get(i))){
+			String lineComment = (String) lineComments.get(i);
+			if(line.startsWith(lineComment) && !startsWithAreaComment(line, lineComment)){
 				return true;
 			}
 		}
@@ -157,6 +158,18 @@ public class DefaultStepCounter implements StepCounter, Cutter {
 
 			int index = line.indexOf(start);
 			if(index==0 && line.indexOf(end,index+start.length())==line.length()-end.length()){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** 行頭が複数行コメントの開始に合致しているかチェック */
+	private boolean startsWithAreaComment(String line, String lineComment) {
+		for (int i=0;i<areaComments.size();i++) {
+			AreaComment area = (AreaComment) areaComments.get(i);
+			String start = area.getStartString();
+			if (lineComment.length() < start.length() && line.startsWith(start)) {
 				return true;
 			}
 		}
